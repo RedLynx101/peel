@@ -6,7 +6,9 @@
   "description": "A tiny transformer learns the art of the banana heist.",
   "license": "MIT",
   "scripts": {
-    "check": "node --check web/app.js && node --check web/renderer.js && node --check web/charts.js && node --check web/editor.js"
+    "check": "node --check web/app.js && node --check web/renderer.js && node --check web/charts.js && node --check web/editor.js",
+    "format:check": "prettier --check \"web/*.js\" \"web/*.css\" \"web/*.html\"",
+    "format": "prettier --write \"web/*.js\" \"web/*.css\" \"web/*.html\""
   },
   "devDependencies": {
     "prettier": "^3.9.6"

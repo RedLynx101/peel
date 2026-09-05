@@ -30,7 +30,7 @@ The smaller model is the right choice only when its review cost does not exceed 
 | --- | --- | --- | --- |
 | Bounded learning backend | `gpt-5.6-sol`, high effort | Stateful backend behavior with higher edge-case and integration cost | Primary agent independently verifies backend behavior |
 | This routing guide | `gpt-5.6-luna`, medium effort | Small documentation task with a direct acceptance check | Primary agent reviews the file and diff |
-| No Terra dispatch yet | — | No medium-sized clear-contract module has been assigned in this run | — |
+| Independent backend review | `gpt-5.6-terra`, high effort | Read-only audit of observation leakage, checkpoint resume, and environment semantics | Primary reproduced findings; Sol repaired teacher targets, RNG restoration, and split generation before acceptance |
 
 ## Handoff checklist
 

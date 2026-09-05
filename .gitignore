@@ -3,11 +3,13 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .ruff_cache/
+*.egg-info/
 node_modules/
 work/
 runs/
 *.pt
 *.pth
+!artifacts/models/joyce-banana.pt
 .env
 .env.*
 !.env.example

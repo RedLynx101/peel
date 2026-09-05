@@ -38,7 +38,7 @@ def train_variant(
     memoryless: bool,
     seed: int,
     device: str,
-) -> float:
+) -> dict[str, float]:
     torch.manual_seed(seed)
     model = TemporalActorCritic(context=context, width=width, layers=1, heads=4).to(
         device
@@ -77,9 +77,20 @@ def train_variant(
             m = torch.zeros_like(m)
             m[:, 0] = True
         logits, _ = model(h, m)
-        return float(
+        accuracy = float(
             (logits[:, :2].argmax(-1).cpu().numpy() == labels[test_idx]).mean()
         )
+        # Same trained model, remove all past observations at evaluation time.
+        h = h.clone()
+        h[:, 0] = h[:, -1] if not memoryless else h[:, 0]
+        h[:, 1:] = 0
+        m = torch.zeros_like(m)
+        m[:, 0] = True
+        ablated, _ = model(h, m)
+        removed = float(
+            (ablated[:, :2].argmax(-1).cpu().numpy() == labels[test_idx]).mean()
+        )
+        return {"accuracy": accuracy, "history_removed_accuracy": removed}
 
 
 def main() -> None:
@@ -97,29 +108,22 @@ def main() -> None:
     args = parser.parse_args()
     torch.set_num_threads(args.torch_num_threads)
     dataset = make_dataset(args.samples, args.context, args.seed)
+    history = train_variant(
+        *dataset, args.context, args.width, args.epochs, False, args.seed, args.device
+    )
+    memoryless = train_variant(
+        *dataset, args.context, args.width, args.epochs, True, args.seed, args.device
+    )
     result = {
         "kind": "controlled-cue-supervised",
         "samples": args.samples,
         "context": args.context,
         "seed": args.seed,
-        "transformer_history_accuracy": train_variant(
-            *dataset,
-            args.context,
-            args.width,
-            args.epochs,
-            False,
-            args.seed,
-            args.device,
-        ),
-        "memoryless_last_observation_accuracy": train_variant(
-            *dataset,
-            args.context,
-            args.width,
-            args.epochs,
-            True,
-            args.seed,
-            args.device,
-        ),
+        "epochs": args.epochs,
+        "test_samples": args.samples - int(args.samples * 0.8),
+        "transformer_history_accuracy": history["accuracy"],
+        "history_removed_accuracy": history["history_removed_accuracy"],
+        "memoryless_last_observation_accuracy": memoryless["accuracy"],
     }
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

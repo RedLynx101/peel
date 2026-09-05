@@ -22,6 +22,7 @@ RUNS = ROOT / "runs"
 
 class GridRequest(BaseModel):
     grid: list[str]
+    stage: str = "exit"
 
 
 class PlayRequest(BaseModel):
@@ -36,6 +37,7 @@ app = FastAPI(title="Peel API", version=__version__)
 
 
 def _safe_checkpoint(name: str) -> Path:
+    root = RUNS
     if name == "champion":
         manifest = DATA / "model-manifest.json"
         if not manifest.exists():
@@ -43,15 +45,26 @@ def _safe_checkpoint(name: str) -> Path:
                 409,
                 "no champion has been promoted; run evaluation-backed training first",
             )
-        name = str(json.loads(manifest.read_text(encoding="utf-8")).get("champion", ""))
-    candidate = (RUNS / name).resolve()
-    if RUNS.resolve() not in candidate.parents or not candidate.is_file():
-        raise HTTPException(404, "checkpoint not found beneath runs/")
+        metadata = json.loads(manifest.read_text(encoding="utf-8"))
+        name = str(metadata.get("champion", ""))
+        if metadata.get("storage") == "bundled":
+            root = ROOT / "artifacts" / "models"
+    candidate = (root / name).resolve()
+    if root.resolve() not in candidate.parents or not candidate.is_file():
+        raise HTTPException(404, "checkpoint not found in the selected model directory")
     return candidate
 
 
 def _replay_files() -> list[Path]:
     directory = DATA / "replays"
+    index = directory / "index.json"
+    if index.exists():
+        return [
+            directory / (entry["id"] + ".json")
+            for entry in json.loads(index.read_text())
+            if Path(entry["id"]).name == entry["id"]
+            and (directory / (entry["id"] + ".json")).is_file()
+        ]
     return sorted(
         (path for path in directory.glob("*.json") if path.name != "index.json"),
         key=lambda p: p.name,
@@ -87,7 +100,7 @@ def experiments() -> list[dict[str, Any]]:
                 {
                     "id": metrics_path.parent.name,
                     "source": "local-run",
-                    "curve": records,
+                    "curve": [r for r in records if r.get("phase") == "eval"],
                 }
             )
     return summaries
@@ -118,7 +131,13 @@ def replay(replay_id: str) -> dict[str, Any]:
 
 @app.post("/api/validate")
 def validate(request: GridRequest) -> dict[str, Any]:
-    return validate_map(request.grid).as_dict()
+    if request.stage not in STAGES:
+        raise HTTPException(422, f"stage must be one of {STAGES}")
+    result = validate_map(request.grid).as_dict()
+    if request.stage != "exit" and sum(row.count("B") for row in request.grid) != 1:
+        result["valid"] = False
+        result["errors"].append("A heist needs exactly one banana.")
+    return result
 
 
 @app.post("/api/play")
@@ -126,9 +145,9 @@ def play(request: PlayRequest) -> dict[str, Any]:
     if request.stage not in STAGES:
         raise HTTPException(422, f"stage must be one of {STAGES}")
     if request.grid is not None:
-        result = validate_map(request.grid)
-        if not result.valid:
-            raise HTTPException(422, {"valid": False, "errors": list(result.errors)})
+        result = validate(GridRequest(grid=request.grid, stage=request.stage))
+        if not result["valid"]:
+            raise HTTPException(422, result)
     if request.checkpoint == "scripted":
         replay_value, _ = scripted_episode(
             PeelEnv(request.stage, request.max_steps, request.grid), request.seed

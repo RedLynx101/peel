@@ -31,7 +31,7 @@ DEFAULTS: dict[str, Any] = {
     "learning_rate": 0.0003,
     "num_envs": 8,
     "rollout_steps": 64,
-    "total_steps": 100_000,
+    "total_steps": 98_304,
     "update_epochs": 4,
     "minibatch_size": 128,
     "gamma": 0.99,
@@ -210,7 +210,7 @@ def _export_experiment(
     current.append(
         {
             "id": run_dir.name,
-            "label": f"{config['stage'].title()} BC + PPO",
+            "label": f"{config['stage'].title()} {'BC + PPO' if config['bc_episodes'] and config['bc_epochs'] else 'PPO from scratch'}",
             "stage": config["stage"],
             "seed": config["seed"],
             "kind": "measured-validation",
@@ -247,6 +247,7 @@ def _maybe_promote(
     replay = record.pop("representative_replay")
     replay_id = f"{run_dir.name}-{record['checkpoint_phase']}-{global_step}"
     replay["id"] = replay_id
+    replay["kind"] = record["checkpoint_phase"]
     replay["label"] = (
         f"{run_dir.name} · {record['checkpoint_phase']} · validation step {global_step}"
     )
@@ -505,11 +506,37 @@ def train(
     resume: Path | None = None,
     warm_start: Path | None = None,
 ) -> Path:
+    run_started = time.perf_counter()
+    for key in (
+        "num_envs",
+        "rollout_steps",
+        "minibatch_size",
+        "update_epochs",
+        "eval_interval",
+        "eval_episodes",
+        "checkpoint_interval",
+        "max_milestones",
+    ):
+        if int(config[key]) < 1:
+            raise ValueError(f"{key} must be positive")
+    if int(config["minibatch_size"]) < 2:
+        raise ValueError(
+            "minibatch_size must be at least 2 for advantage normalization"
+        )
+    batch_steps = int(config["rollout_steps"]) * int(config["num_envs"])
+    if int(config["total_steps"]) < 0 or int(config["total_steps"]) % batch_steps:
+        raise ValueError(f"total_steps must be a nonnegative multiple of {batch_steps}")
+    if (run_dir / "metrics.jsonl").exists() and not resume:
+        raise ValueError(
+            "run directory already contains metrics; use --resume or a new run directory"
+        )
     seed = int(config["seed"])
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     device = resolve_device(str(config["device"]))
+    if device == "cuda":
+        torch.cuda.reset_peak_memory_stats()
     torch.set_num_threads(int(config["torch_num_threads"]))
     model = TemporalActorCritic(
         config["context"], config["width"], config["layers"], config["heads"]
@@ -541,6 +568,8 @@ def train(
                 f"resume config differs in immutable fields: {sorted(incompatible)}; use --warm-start for a new stage"
             )
         start_update, global_step = int(payload["update"]), int(payload["global_step"])
+        if int(config["total_steps"]) < global_step:
+            raise ValueError("resume total_steps cannot precede the saved global_step")
     else:
         if warm_start:
             load_checkpoint(warm_start, model, device=device)
@@ -552,12 +581,23 @@ def train(
             best = _maybe_promote(
                 record, model, optimizer, config, run_dir, 0, 0, best, logger
             )
-        behavior_clone(model, optimizer, config, device, logger)
-        save_checkpoint(run_dir / "post-bc.pt", model, optimizer, config, 0, 0, "bc")
-        record = _evaluation(model, config, device, 0, "bc")
-        best = _maybe_promote(
-            record, model, optimizer, config, run_dir, 0, 0, best, logger
-        )
+        if int(config["bc_episodes"]) and int(config["bc_epochs"]):
+            behavior_clone(model, optimizer, config, device, logger)
+            save_checkpoint(
+                run_dir / "post-bc.pt", model, optimizer, config, 0, 0, "bc"
+            )
+            record = _evaluation(model, config, device, 0, "bc")
+            best = _maybe_promote(
+                record, model, optimizer, config, run_dir, 0, 0, best, logger
+            )
+        elif warm_start:
+            record = _evaluation(model, config, device, 0, "warm-start")
+            best = _maybe_promote(
+                record, model, optimizer, config, run_dir, 0, 0, best, logger
+            )
+    # A lower RL rate can protect a useful imitation policy from abrupt drift.
+    for group in optimizer.param_groups:
+        group["lr"] = float(config.get("ppo_learning_rate", config["learning_rate"]))
     (run_dir / "config.json").write_text(json.dumps(config, indent=2), encoding="utf-8")
     envs = [
         PeelEnv(config["stage"], config["max_steps"])
@@ -580,7 +620,7 @@ def train(
         observations.append(obs)
     episode_returns, episode_lengths = [0.0] * len(envs), [0] * len(envs)
     batch_steps = int(config["rollout_steps"]) * len(envs)
-    updates = max(1, int(config["total_steps"]) // batch_steps)
+    updates = int(config["total_steps"]) // batch_steps
     started = time.perf_counter()
     for update in range(start_update, updates):
         model.eval()
@@ -665,7 +705,30 @@ def train(
         "ppo",
         {"next_seeds": next_seeds},
     )
+    save_checkpoint(
+        run_dir / "latest.pt",
+        model,
+        optimizer,
+        config,
+        global_step,
+        updates,
+        "ppo",
+        {"next_seeds": next_seeds},
+    )
     _export_experiment(run_dir, config, logger.path)
+    (run_dir / "runtime.json").write_text(
+        json.dumps(
+            {
+                "elapsed_seconds": time.perf_counter() - run_started,
+                "device": device,
+                "peak_allocated_bytes": torch.cuda.max_memory_allocated()
+                if device == "cuda"
+                else None,
+                "includes": "initialization, demonstrations, PPO, evaluation, checkpoint and artifact writes",
+            },
+            indent=2,
+        )
+    )
     return final
 
 
@@ -683,6 +746,7 @@ def main() -> None:
     parser.add_argument("--total-steps", type=int)
     args = parser.parse_args()
     config = load_config(args.config)
+    torch.set_num_threads(int(config["torch_num_threads"]))
     if args.device:
         config["device"] = args.device
     if args.total_steps is not None:

@@ -200,7 +200,10 @@ export class MuseumRenderer {
       (state.visible || []).map((p) => `${p[0]},${p[1]}`),
     );
     const beam = new Set();
-    if (state.camera) {
+    if (
+      state.camera &&
+      (!this.agentView || visible.has(`${state.camera.x},${state.camera.y}`))
+    ) {
       const { x, y, dir } = state.camera;
       const [dx, dy] = [
         [1, 0],

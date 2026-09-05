@@ -55,14 +55,20 @@ function kindLabel(kind = "") {
 function frameAt(r, i) {
   return r.frames[Math.min(i, r.frames.length - 1)];
 }
+function lastFrame() {
+  return Math.max(
+    replay?.frames.length - 1 || 0,
+    ...comparisonReplays.map((r) => r.frames.length - 1),
+  );
+}
 function setFrame(next, animate = true) {
   if (!replay?.frames?.length) return;
-  index = Math.min(Math.max(0, next), replay.frames.length - 1);
+  index = Math.min(Math.max(0, next), lastFrame());
   const state = frameAt(replay, index);
   renderer.setState(state, animate);
   $("timeline").value = index;
   $("step-counter").textContent =
-    `${String(index).padStart(3, "0")} / ${String(replay.frames.length - 1).padStart(3, "0")}`;
+    `${String(index).padStart(3, "0")} / ${String(lastFrame()).padStart(3, "0")}`;
   $("inventory").textContent = state.inventory?.banana
     ? "Safely pocketed"
     : "Not yet";
@@ -75,6 +81,10 @@ function setFrame(next, animate = true) {
     }[state.status] ||
     state.status ||
     "In progress";
+  const probabilities = replay.metrics?.action_probabilities?.[index];
+  $("decision-note").textContent = probabilities
+    ? `Next: ${replay.metrics.action_names[replay.actions[index]]} · ${(Math.max(...probabilities) * 100).toFixed(0)}% policy probability`
+    : "Episode complete. Every move above is recorded.";
   $("scene-caption").textContent =
     state.status === "escaped"
       ? "A fine addition to the collection."
@@ -148,7 +158,10 @@ function showRun(id) {
   const result = r.test || r.evaluation || r.final_eval || r.summary || {};
   const success = result.success_rate ?? r.success_rate ?? last?.success;
   $("metric-success").textContent =
-    success == null ? "—" : `${(Number(success) * 100).toFixed(0)}%`;
+    success == null ? "—" : `${(Number(success) * 100).toFixed(1)}%`;
+  $("success-label").textContent = r.test
+    ? "Champion · unseen test rooms"
+    : "Latest validation extraction rate";
   $("metric-steps").textContent = formatNumber(
     r.env_steps ?? r.total_steps ?? last?.step,
   );
@@ -161,14 +174,14 @@ function showRun(id) {
   $("chart-source").textContent =
     `${r.label} · ${r.curve.length} recorded evaluation points`;
   $("chart-legend").textContent =
-    "● Evaluation success · environment interactions";
+    "● Validation success · PPO interactions (warm-up at 0)";
   $("research-detail").textContent =
     r.notes ||
     r.description ||
     "These results describe this experiment and its evaluation distribution. They do not establish general intelligence or universal maze-solving ability.";
 }
 $("play-button").addEventListener("click", () => {
-  if (replay && index === replay.frames.length - 1) setFrame(0, false);
+  if (replay && index === lastFrame()) setFrame(0, false);
   togglePlay();
 });
 $("restart-button").addEventListener("click", () => {
@@ -201,12 +214,28 @@ function closeComparison() {
   compareRenderers.forEach((r) => r.destroy());
   compareRenderers = [];
   comparisonReplays = [];
+  if (replay) {
+    $("timeline").max = lastFrame();
+    setFrame(Math.min(index, lastFrame()), false);
+  }
 }
 $("close-comparison").addEventListener("click", closeComparison);
 $("compare-button").addEventListener("click", async () => {
   if (!replay) return;
   const earlier =
-    replays.find((r) => r.id !== replay.id && r.seed === replay.seed) ||
+    replays.find(
+      (r) =>
+        r.id !== replay.id &&
+        r.seed === replay.seed &&
+        r.stage === replay.stage &&
+        /random/.test(r.kind),
+    ) ||
+    replays.find(
+      (r) =>
+        r.id !== replay.id &&
+        r.seed === replay.seed &&
+        r.stage === replay.stage,
+    ) ||
     replays.find((r) => r.id !== replay.id);
   if (!earlier) return;
   try {
@@ -217,6 +246,7 @@ $("compare-button").addEventListener("click", async () => {
     closeComparison();
     $("comparison").hidden = false;
     comparisonReplays = [old, replay];
+    $("timeline").max = lastFrame();
     compareRenderers = [
       new MuseumRenderer($("before-canvas"), { decorations: false }),
       new MuseumRenderer($("after-canvas"), { decorations: false }),
@@ -224,7 +254,10 @@ $("compare-button").addEventListener("click", async () => {
     $("before-label").textContent = old.label || old.id;
     $("after-label").textContent = replay.label || replay.id;
     $("comparison-note").textContent =
-      old.seed === replay.seed
+      old.seed === replay.seed &&
+      old.stage === replay.stage &&
+      JSON.stringify(old.frames[0].grid) ===
+        JSON.stringify(replay.frames[0].grid)
         ? "Matched map seed. Both recordings advance one action at a time."
         : "Different map seeds. This is a visual comparison, not a controlled performance test.";
     setFrame(0, false);
@@ -248,7 +281,7 @@ async function validate() {
   const data = await request("/api/validate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ grid: editor.value }),
+    body: JSON.stringify({ grid: editor.value, stage: "camera" }),
   });
   editorMessage(
     data.valid
@@ -351,13 +384,15 @@ async function init() {
       o.textContent = r.label;
       $("run-select").append(o);
     }
-    showRun(runs.at(-1)?.id);
-    if (runs.length) $("run-select").value = runs.at(-1).id;
+    const featured =
+      runs.find((r) => r.id === "banana-refined-seed11") || runs.at(-1);
+    showRun(featured?.id);
+    if (featured) $("run-select").value = featured.id;
   } else drawLearningChart($("learning-chart"), []);
 }
 function animate(t) {
   if (playing && replay && t - lastAdvance > 420 / speed) {
-    if (index < replay.frames.length - 1) setFrame(index + 1);
+    if (index < lastFrame()) setFrame(index + 1);
     else togglePlay(false);
     lastAdvance = t;
   }
@@ -367,3 +402,8 @@ function animate(t) {
 }
 requestAnimationFrame(animate);
 init();
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => showRun($("run-select").value), 120);
+});

@@ -32,7 +32,7 @@ class TemporalActorCritic(nn.Module):
             norm_first=True,
         )
         self.transformer = nn.TransformerEncoder(
-            layer, layers, norm=nn.LayerNorm(width)
+            layer, layers, norm=nn.LayerNorm(width), enable_nested_tensor=False
         )
         self.actor = nn.Linear(width, 5)
         self.critic = nn.Linear(width, 1)

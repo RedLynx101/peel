@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "peel-heist"
 version = "0.1.0"
 description = "A compact partially observable banana museum heist for transformer PPO"
-readme = "docs/BACKEND.md"
+readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
   "numpy>=2.1,<3",
@@ -26,6 +26,7 @@ peel-evaluate = "peel.evaluate:main"
 peel-replay = "peel.replay:main"
 peel-serve = "peel.server:main"
 peel-memory = "peel.memory_benchmark:main"
+peel-curriculum = "peel.curriculum:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
