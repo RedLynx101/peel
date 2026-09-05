@@ -1,5 +1,159 @@
 /** Accessible SVG charts driven exclusively by exported experiment records. */
-const NS='http://www.w3.org/2000/svg';
-function svgElement(tag,attrs={},text){const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);if(text!==undefined)el.textContent=text;return el;}
-export function drawLearningChart(container,points){container.replaceChildren();const svg=svgElement('svg',{viewBox:'0 0 1100 270',preserveAspectRatio:'none',role:'img'});svg.append(svgElement('title',{},'Evaluation success over training interactions'));const left=48,right=1078,top=20,bottom=230;const maxX=Math.max(1,...points.map(p=>p.step));for(let i=0;i<=4;i++){const y=bottom-i/4*(bottom-top);svg.append(svgElement('line',{x1:left,x2:right,y1:y,y2:y,stroke:'#dce0d0','stroke-width':1,'stroke-dasharray':i===0?'none':'3 5'}));svg.append(svgElement('text',{x:left-12,y:y+4,'text-anchor':'end',fill:'#859078','font-size':10,'font-family':'Arial'},`${i*25}%`));}for(let i=0;i<=4;i++){const x=left+i/4*(right-left);svg.append(svgElement('text',{x,y:bottom+25,'text-anchor':i===0?'start':i===4?'end':'middle',fill:'#859078','font-size':10,'font-family':'Arial'},Intl.NumberFormat('en',{notation:'compact',maximumFractionDigits:1}).format(maxX*i/4)));}if(points.length){const coords=points.map(p=>[left+p.step/maxX*(right-left),bottom-Math.max(0,Math.min(1,p.success))*(bottom-top)]);const path=coords.map(([x,y],i)=>`${i?'L':'M'}${x},${y}`).join(' ');svg.append(svgElement('path',{d:`${path} L${coords.at(-1)[0]},${bottom} L${coords[0][0]},${bottom} Z`,fill:'#d8dcba',opacity:.45}));svg.append(svgElement('path',{d:path,fill:'none',stroke:'#597248','stroke-width':2.7,'stroke-linejoin':'round'}));coords.forEach(([x,y],i)=>{const dot=svgElement('circle',{cx:x,cy:y,r:i===coords.length-1?5:3,fill:i===coords.length-1?'#d5ad34':'#597248',stroke:'#f5f1e7','stroke-width':2});dot.append(svgElement('title',{},`${points[i].step.toLocaleString()} interactions: ${(points[i].success*100).toFixed(1)}% success${points[i].phase?' · '+points[i].phase:''}`));svg.append(dot);});}else svg.append(svgElement('text',{x:565,y:130,'text-anchor':'middle',fill:'#859078','font-size':14,'font-family':'Arial'},'No measured learning curve has been exported yet.'));container.append(svg);}
-export function normalizeRuns(payload){const runs=Array.isArray(payload)?payload:(payload.runs||payload.experiments||[]);return runs.map(run=>{const raw=run.curve||run.history||run.metrics||[];const curve=(Array.isArray(raw)?raw:[]).map((p,i)=>({step:Number(p.env_steps??p.global_step??p.steps??p.step??i),success:Number(p.success_rate??p.eval_success??p.validation_success??p.success??0),phase:p.phase})).filter(p=>Number.isFinite(p.step)&&Number.isFinite(p.success));return {...run,id:run.id||run.run_id||run.name,label:run.label||run.name||run.id||run.run_id,curve};});}
+const NS = "http://www.w3.org/2000/svg";
+function svgElement(tag, attrs = {}, text) {
+  const el = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  if (text !== undefined) el.textContent = text;
+  return el;
+}
+export function drawLearningChart(container, points) {
+  container.replaceChildren();
+  const chartWidth = Math.max(330, container.clientWidth || 1100);
+  const svg = svgElement("svg", {
+    viewBox: "0 0 " + chartWidth + " 270",
+    preserveAspectRatio: "none",
+    role: "img",
+  });
+  svg.append(
+    svgElement("title", {}, "Evaluation success over training interactions"),
+  );
+  const left = 42,
+    right = chartWidth - 16,
+    top = 20,
+    bottom = 230;
+  const maxX = Math.max(1, ...points.map((p) => p.step));
+  for (let i = 0; i <= 4; i++) {
+    const y = bottom - (i / 4) * (bottom - top);
+    svg.append(
+      svgElement("line", {
+        x1: left,
+        x2: right,
+        y1: y,
+        y2: y,
+        stroke: "#dce0d0",
+        "stroke-width": 1,
+        "stroke-dasharray": i === 0 ? "none" : "3 5",
+      }),
+    );
+    svg.append(
+      svgElement(
+        "text",
+        {
+          x: left - 12,
+          y: y + 4,
+          "text-anchor": "end",
+          fill: "#859078",
+          "font-size": 10,
+          "font-family": "Arial",
+        },
+        `${i * 25}%`,
+      ),
+    );
+  }
+  for (let i = 0; i <= 4; i++) {
+    const x = left + (i / 4) * (right - left);
+    svg.append(
+      svgElement(
+        "text",
+        {
+          x,
+          y: bottom + 25,
+          "text-anchor": i === 0 ? "start" : i === 4 ? "end" : "middle",
+          fill: "#859078",
+          "font-size": 10,
+          "font-family": "Arial",
+        },
+        Intl.NumberFormat("en", {
+          notation: "compact",
+          maximumFractionDigits: 1,
+        }).format((maxX * i) / 4),
+      ),
+    );
+  }
+  if (points.length) {
+    const coords = points.map((p) => [
+      left + (p.step / maxX) * (right - left),
+      bottom - Math.max(0, Math.min(1, p.success)) * (bottom - top),
+    ]);
+    const path = coords
+      .map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`)
+      .join(" ");
+    svg.append(
+      svgElement("path", {
+        d: `${path} L${coords.at(-1)[0]},${bottom} L${coords[0][0]},${bottom} Z`,
+        fill: "#d8dcba",
+        opacity: 0.45,
+      }),
+    );
+    svg.append(
+      svgElement("path", {
+        d: path,
+        fill: "none",
+        stroke: "#597248",
+        "stroke-width": 2.7,
+        "stroke-linejoin": "round",
+      }),
+    );
+    coords.forEach(([x, y], i) => {
+      const dot = svgElement("circle", {
+        cx: x,
+        cy: y,
+        r: i === coords.length - 1 ? 5 : 3,
+        fill: i === coords.length - 1 ? "#d5ad34" : "#597248",
+        stroke: "#f5f1e7",
+        "stroke-width": 2,
+      });
+      dot.append(
+        svgElement(
+          "title",
+          {},
+          `${points[i].step.toLocaleString()} interactions: ${(points[i].success * 100).toFixed(1)}% success${points[i].phase ? " · " + points[i].phase : ""}`,
+        ),
+      );
+      svg.append(dot);
+    });
+  } else
+    svg.append(
+      svgElement(
+        "text",
+        {
+          x: chartWidth / 2,
+          y: 130,
+          "text-anchor": "middle",
+          fill: "#859078",
+          "font-size": 11,
+          "font-family": "Arial",
+        },
+        "No measured learning curve has been exported yet.",
+      ),
+    );
+  container.append(svg);
+}
+export function normalizeRuns(payload) {
+  const runs = Array.isArray(payload)
+    ? payload
+    : payload.runs || payload.experiments || [];
+  return runs.map((run) => {
+    const raw = run.curve || run.history || run.metrics || [];
+    const curve = (Array.isArray(raw) ? raw : [])
+      .map((p, i) => ({
+        step: Number(p.env_steps ?? p.global_step ?? p.steps ?? p.step ?? i),
+        success: Number(
+          p.eval_success_rate ??
+            p.success_rate ??
+            p.eval_success ??
+            p.validation_success ??
+            p.success ??
+            0,
+        ),
+        phase: p.checkpoint_phase ?? p.phase,
+      }))
+      .filter((p) => Number.isFinite(p.step) && Number.isFinite(p.success));
+    return {
+      ...run,
+      id: run.id || run.run_id || run.name,
+      label: run.label || run.name || run.id || run.run_id,
+      curve,
+    };
+  });
+}

@@ -1,0 +1,10 @@
+{
+  "seed": 11, "stage": "banana", "max_steps": 96,
+  "context": 16, "width": 64, "layers": 2, "heads": 4,
+  "device": "cuda", "torch_num_threads": 2,
+  "learning_rate": 0.0003, "num_envs": 16, "rollout_steps": 64,
+  "total_steps": 131072, "update_epochs": 4, "minibatch_size": 256,
+  "bc_episodes": 0, "bc_epochs": 0, "bc_batch_size": 256,
+  "checkpoint_interval": 16, "eval_interval": 16, "eval_episodes": 32,
+  "max_milestones": 6
+}

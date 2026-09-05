@@ -1,0 +1,23 @@
+{
+  "seed": 7,
+  "stage": "exit",
+  "max_steps": 48,
+  "context": 16,
+  "width": 64,
+  "layers": 1,
+  "heads": 4,
+  "device": "cpu",
+  "num_envs": 2,
+  "rollout_steps": 8,
+  "total_steps": 16,
+  "update_epochs": 1,
+  "minibatch_size": 16,
+  "bc_episodes": 2,
+  "bc_epochs": 1,
+  "bc_batch_size": 32,
+  "checkpoint_interval": 1,
+  "eval_interval": 1,
+  "eval_episodes": 4,
+  "max_milestones": 2,
+  "torch_num_threads": 2
+}
