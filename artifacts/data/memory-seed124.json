@@ -1,0 +1,11 @@
+{
+  "kind": "controlled-cue-supervised",
+  "samples": 2000,
+  "context": 16,
+  "seed": 124,
+  "epochs": 10,
+  "test_samples": 400,
+  "transformer_history_accuracy": 1.0,
+  "history_removed_accuracy": 0.53,
+  "memoryless_last_observation_accuracy": 0.47
+}

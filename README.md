@@ -18,6 +18,8 @@ Peel is a local reinforcement-learning experiment with a deliberately small worl
 
 The browser is a renderer. Python owns the rules. Training runs headlessly on a local GPU; the demo works without a GPU or an API key.
 
+![The same room before practice and with the banana champion](artifacts/screenshots/comparison.png)
+
 ## Open the gallery
 
 Requires **Python 3.12**, Git, and a browser. Clone this repository, then run:
@@ -51,7 +53,9 @@ PPO is on-policy: successful trajectories are **not** blindly replayed as PPO ba
 
 ![Measured learning curves](artifacts/charts/learning-curves.png)
 
-See the [experiment report](docs/EXPERIMENTS.md) for actual counts, untouched test results, uncertainty, configuration, failure cases, and timing. The checked-in JSONL records are the source of the charts. A warm-started policy and a PPO-only policy were trained at the same PPO interaction budget; demonstrations add extra data and computation, so this is not an equal-total-compute comparison.
+The refined banana champion escaped **120/128 untouched test rooms (93.75%)**, up from **15/128 after its imitation warm-up**. At the smaller matched PPO budget, the initial warm-started champion scored **64/128**, versus **17/128 from scratch**. The harder camera model scored **0/128** on test despite 10/32 validation successes; that failure is retained and explained.
+
+See the [experiment report](docs/EXPERIMENTS.md) for counts, uncertainty, configurations, failure cases, and timing. The checked-in JSONL records are the source of the charts. Demonstrations add extra data and computation, so the matched-PPO-budget comparison is not an equal-total-compute comparison. No further recipe tuning followed test evaluation.
 
 The memory probe is a **separate supervised diagnostic** with identical final observations and different earlier cues. It checks that temporal information can be used; it does not prove that the heist policy needs or uses memory. One seed per main training recipe is an exploratory result, not a reliable algorithm ranking.
 
@@ -65,7 +69,7 @@ For the recorded NVIDIA CUDA setup, install the CUDA wheel into the virtual envi
 .venv\Scripts\python.exe -m peel.train --config configs/banana-study.json --run-dir runs/my-study
 ```
 
-Use `--device cpu` for a CPU run. Each run needs a fresh directory. More recipes live in [configs/](configs/). The actual measured dependency versions are in [requirements-observed.txt](requirements-observed.txt).
+Use `--device cpu` for a CPU run. Each run needs a fresh directory. More recipes live in [configs/](configs/). The actual measured dependency versions are in [requirements-observed.txt](requirements-observed.txt). That file is an environment snapshot, including unused early exploration packages such as MiniGrid; `pyproject.toml` declares the smaller actual dependency set. CUDA wheel selection follows [PyTorch's installation guidance](https://pytorch.org/get-started/locally/).
 
 ```powershell
 # Resume at fresh episode boundaries, extending a complete rollout budget.

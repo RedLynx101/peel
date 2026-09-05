@@ -23,7 +23,7 @@ def make_dataset(
     histories[:, :, 54] = 4  # camera direction hidden
     histories[:, :, 55] = 0.5  # constant time prevents deadline leakage
     histories[:, :, 53] = 5  # constant previous action
-    histories[:, 0, 12] = labels + 3  # key tile means left, banana tile means right
+    histories[:, 0, 12] = labels + 3  # two tile-category cues encode left/right
     histories[:, 0, 25 + 12] = 1
     return histories, masks, labels
 

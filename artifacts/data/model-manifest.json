@@ -1,0 +1,26 @@
+{
+  "storage": "bundled",
+  "champion": "joyce-banana.pt",
+  "sha256": "3555f654b334fd363172fc96e5a8914905a8250dcfc151ec068072e17f989176",
+  "run": "banana-refined-seed11",
+  "validation": {
+    "global_step": 262144,
+    "update": 256,
+    "validation": {
+      "phase": "eval",
+      "split": "validation",
+      "checkpoint_phase": "ppo",
+      "global_step": 262144,
+      "eval_seed_base": 1001100,
+      "eval_episodes": 32,
+      "eval_successes": 31,
+      "eval_success_rate": 0.96875,
+      "eval_mean_return": 10.3865625,
+      "eval_mean_steps": 26.96875
+    },
+    "score": [
+      31,
+      10.3865625
+    ]
+  }
+}

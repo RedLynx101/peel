@@ -36,7 +36,9 @@ Training prints and writes only measured records. BC metrics and PPO training-ba
 
 `artifacts/data/replays/*.json` follows `BACKEND_CONTRACT.md`. Frames contain the initial state and every state after an action. `actions` contains integer action IDs, while `metrics.action_names` provides the stable mapping. Policy replays can also contain `metrics.action_probabilities`. `artifacts/data/experiments.json` is an array of published real run summaries; an empty array means no experiment has been run or published. Local `/api/experiments` falls back to actual JSONL records found beneath `runs/`.
 
-The controlled cue benchmark is a separately labeled supervised diagnostic, not heist PPO evidence. At its final decision, every current observation is identical; only a cue at the first timestep identifies the target action. It reports measured held-out accuracy for the temporal transformer and an independently initialized model trained with only the last observation visible.
+The controlled cue benchmark is a separately labeled supervised diagnostic, not heist PPO evidence. At its final decision, every current observation is identical; only a cue at the first timestep identifies the target action. It reports measured held-out accuracy for the temporal transformer, the same weights with history removed at evaluation, and a separately trained model with only the last observation visible.
+
+`python -m peel.curriculum` automates bounded stage blocks, weight-only transitions, and training-domain mastery probes. It records progress in `curriculum.json`, advances at a configured threshold, and stops if the block budget expires. Earlier-stage replay mixing and automatic multi-stage resume are not implemented. The reported camera experiment used an explicit warm start from the banana champion, not a completed automatic mastery curriculum.
 
 ## Limitations
 

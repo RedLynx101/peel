@@ -1,0 +1,47 @@
+[
+  {
+    "id": "showcase-random",
+    "label": "01 \u00b7 Before practice",
+    "kind": "random",
+    "seed": 1001100,
+    "success": false,
+    "steps": 96,
+    "stage": "banana"
+  },
+  {
+    "id": "showcase-bc",
+    "label": "02 \u00b7 After watching the guide",
+    "kind": "bc",
+    "seed": 1001100,
+    "success": true,
+    "steps": 40,
+    "stage": "banana"
+  },
+  {
+    "id": "showcase-ppo",
+    "label": "03 \u00b7 The banana champion",
+    "kind": "ppo",
+    "seed": 1001100,
+    "success": true,
+    "steps": 27,
+    "stage": "banana"
+  },
+  {
+    "id": "champion-camera-study-seed23",
+    "label": "04 \u00b7 Camera-stage champion",
+    "kind": "bc",
+    "seed": 1002302,
+    "success": true,
+    "steps": 20,
+    "stage": "camera"
+  },
+  {
+    "id": "scripted-door-0",
+    "label": "05 \u00b7 Scripted guide (not learned)",
+    "kind": "scripted",
+    "seed": 0,
+    "success": true,
+    "steps": 16,
+    "stage": "door"
+  }
+]
