@@ -1,0 +1,20 @@
+{
+  "global_step": 81920,
+  "update": 80,
+  "validation": {
+    "phase": "eval",
+    "split": "validation",
+    "checkpoint_phase": "ppo",
+    "global_step": 81920,
+    "eval_seed_base": 1001100,
+    "eval_episodes": 32,
+    "eval_successes": 19,
+    "eval_success_rate": 0.59375,
+    "eval_mean_return": 6.068125,
+    "eval_mean_steps": 71.3125
+  },
+  "score": [
+    19,
+    6.068125
+  ]
+}

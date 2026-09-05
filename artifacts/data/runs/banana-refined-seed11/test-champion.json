@@ -1,0 +1,913 @@
+{
+  "run": "banana-refined-seed11",
+  "phase": "champion",
+  "split": "test",
+  "seed_base": 2000000,
+  "checkpoint_sha256": "ccde2ac09e7a2323a30a44c7acc64360fe7091161203e730d708fb027c43a530",
+  "summary": {
+    "stage": "banana",
+    "episodes": 128,
+    "successes": 120,
+    "success_rate": 0.9375,
+    "mean_return": 9.963828125,
+    "mean_steps": 35.6484375
+  },
+  "episodes": [
+    {
+      "seed": 2000000,
+      "success": true,
+      "steps": 30,
+      "return": 10.7,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000001,
+      "success": true,
+      "steps": 28,
+      "return": 10.72,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000002,
+      "success": true,
+      "steps": 78,
+      "return": 10.219999999999999,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000003,
+      "success": true,
+      "steps": 36,
+      "return": 10.64,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000004,
+      "success": true,
+      "steps": 59,
+      "return": 10.41,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000005,
+      "success": true,
+      "steps": 15,
+      "return": 10.85,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000006,
+      "success": true,
+      "steps": 38,
+      "return": 10.62,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000007,
+      "success": true,
+      "steps": 38,
+      "return": 10.62,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000008,
+      "success": true,
+      "steps": 28,
+      "return": 10.72,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000009,
+      "success": true,
+      "steps": 16,
+      "return": 10.84,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000010,
+      "success": true,
+      "steps": 11,
+      "return": 10.89,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000011,
+      "success": true,
+      "steps": 27,
+      "return": 10.73,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000012,
+      "success": true,
+      "steps": 15,
+      "return": 10.85,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000013,
+      "success": true,
+      "steps": 17,
+      "return": 10.83,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000014,
+      "success": false,
+      "steps": 96,
+      "return": -0.9600000000000006,
+      "status": "timeout"
+    },
+    {
+      "seed": 2000015,
+      "success": true,
+      "steps": 39,
+      "return": 10.61,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000016,
+      "success": true,
+      "steps": 28,
+      "return": 10.72,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000017,
+      "success": true,
+      "steps": 24,
+      "return": 10.76,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000018,
+      "success": false,
+      "steps": 96,
+      "return": 0.03999999999999936,
+      "status": "timeout"
+    },
+    {
+      "seed": 2000019,
+      "success": true,
+      "steps": 22,
+      "return": 10.78,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000020,
+      "success": false,
+      "steps": 96,
+      "return": -0.9600000000000006,
+      "status": "timeout"
+    },
+    {
+      "seed": 2000021,
+      "success": true,
+      "steps": 19,
+      "return": 10.81,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000022,
+      "success": true,
+      "steps": 42,
+      "return": 10.58,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000023,
+      "success": true,
+      "steps": 30,
+      "return": 10.7,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000024,
+      "success": true,
+      "steps": 59,
+      "return": 10.41,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000025,
+      "success": true,
+      "steps": 22,
+      "return": 10.78,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000026,
+      "success": true,
+      "steps": 43,
+      "return": 10.57,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000027,
+      "success": true,
+      "steps": 28,
+      "return": 10.72,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000028,
+      "success": true,
+      "steps": 36,
+      "return": 10.64,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000029,
+      "success": true,
+      "steps": 16,
+      "return": 10.84,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000030,
+      "success": true,
+      "steps": 37,
+      "return": 10.63,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000031,
+      "success": true,
+      "steps": 28,
+      "return": 10.72,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000032,
+      "success": true,
+      "steps": 64,
+      "return": 10.36,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000033,
+      "success": true,
+      "steps": 26,
+      "return": 10.74,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000034,
+      "success": true,
+      "steps": 18,
+      "return": 10.82,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000035,
+      "success": true,
+      "steps": 30,
+      "return": 10.7,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000036,
+      "success": true,
+      "steps": 30,
+      "return": 10.7,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000037,
+      "success": true,
+      "steps": 20,
+      "return": 10.8,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000038,
+      "success": true,
+      "steps": 82,
+      "return": 10.18,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000039,
+      "success": true,
+      "steps": 29,
+      "return": 10.71,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000040,
+      "success": true,
+      "steps": 39,
+      "return": 10.61,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000041,
+      "success": true,
+      "steps": 30,
+      "return": 10.7,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000042,
+      "success": true,
+      "steps": 60,
+      "return": 10.4,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000043,
+      "success": true,
+      "steps": 25,
+      "return": 10.75,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000044,
+      "success": true,
+      "steps": 31,
+      "return": 10.69,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000045,
+      "success": true,
+      "steps": 16,
+      "return": 10.84,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000046,
+      "success": true,
+      "steps": 54,
+      "return": 10.46,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000047,
+      "success": true,
+      "steps": 29,
+      "return": 10.71,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000048,
+      "success": false,
+      "steps": 96,
+      "return": -0.9600000000000006,
+      "status": "timeout"
+    },
+    {
+      "seed": 2000049,
+      "success": true,
+      "steps": 40,
+      "return": 10.6,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000050,
+      "success": true,
+      "steps": 39,
+      "return": 10.61,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000051,
+      "success": true,
+      "steps": 27,
+      "return": 10.73,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000052,
+      "success": true,
+      "steps": 20,
+      "return": 10.8,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000053,
+      "success": true,
+      "steps": 34,
+      "return": 10.66,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000054,
+      "success": true,
+      "steps": 15,
+      "return": 10.85,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000055,
+      "success": true,
+      "steps": 64,
+      "return": 10.36,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000056,
+      "success": true,
+      "steps": 16,
+      "return": 10.84,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000057,
+      "success": true,
+      "steps": 24,
+      "return": 10.76,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000058,
+      "success": true,
+      "steps": 18,
+      "return": 10.82,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000059,
+      "success": true,
+      "steps": 20,
+      "return": 10.8,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000060,
+      "success": true,
+      "steps": 29,
+      "return": 10.71,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000061,
+      "success": false,
+      "steps": 96,
+      "return": -0.9600000000000006,
+      "status": "timeout"
+    },
+    {
+      "seed": 2000062,
+      "success": true,
+      "steps": 14,
+      "return": 10.86,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000063,
+      "success": true,
+      "steps": 25,
+      "return": 10.75,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000064,
+      "success": true,
+      "steps": 19,
+      "return": 10.81,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000065,
+      "success": true,
+      "steps": 25,
+      "return": 10.75,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000066,
+      "success": true,
+      "steps": 26,
+      "return": 10.74,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000067,
+      "success": true,
+      "steps": 21,
+      "return": 10.790000000000001,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000068,
+      "success": true,
+      "steps": 26,
+      "return": 10.74,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000069,
+      "success": true,
+      "steps": 18,
+      "return": 10.82,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000070,
+      "success": true,
+      "steps": 16,
+      "return": 10.84,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000071,
+      "success": true,
+      "steps": 74,
+      "return": 10.26,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000072,
+      "success": true,
+      "steps": 54,
+      "return": 10.46,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000073,
+      "success": true,
+      "steps": 19,
+      "return": 10.81,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000074,
+      "success": true,
+      "steps": 27,
+      "return": 10.73,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000075,
+      "success": true,
+      "steps": 20,
+      "return": 10.8,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000076,
+      "success": true,
+      "steps": 33,
+      "return": 10.67,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000077,
+      "success": true,
+      "steps": 33,
+      "return": 10.67,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000078,
+      "success": true,
+      "steps": 56,
+      "return": 10.44,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000079,
+      "success": true,
+      "steps": 21,
+      "return": 10.790000000000001,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000080,
+      "success": true,
+      "steps": 35,
+      "return": 10.65,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000081,
+      "success": true,
+      "steps": 24,
+      "return": 10.76,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000082,
+      "success": true,
+      "steps": 32,
+      "return": 10.68,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000083,
+      "success": true,
+      "steps": 23,
+      "return": 10.77,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000084,
+      "success": true,
+      "steps": 18,
+      "return": 10.82,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000085,
+      "success": true,
+      "steps": 22,
+      "return": 10.78,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000086,
+      "success": true,
+      "steps": 43,
+      "return": 10.57,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000087,
+      "success": true,
+      "steps": 39,
+      "return": 10.61,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000088,
+      "success": true,
+      "steps": 34,
+      "return": 10.66,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000089,
+      "success": true,
+      "steps": 29,
+      "return": 10.71,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000090,
+      "success": true,
+      "steps": 32,
+      "return": 10.68,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000091,
+      "success": true,
+      "steps": 49,
+      "return": 10.51,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000092,
+      "success": true,
+      "steps": 47,
+      "return": 10.53,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000093,
+      "success": true,
+      "steps": 25,
+      "return": 10.75,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000094,
+      "success": true,
+      "steps": 21,
+      "return": 10.79,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000095,
+      "success": true,
+      "steps": 40,
+      "return": 10.6,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000096,
+      "success": false,
+      "steps": 96,
+      "return": -0.9600000000000006,
+      "status": "timeout"
+    },
+    {
+      "seed": 2000097,
+      "success": true,
+      "steps": 53,
+      "return": 10.47,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000098,
+      "success": true,
+      "steps": 41,
+      "return": 10.59,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000099,
+      "success": true,
+      "steps": 36,
+      "return": 10.64,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000100,
+      "success": true,
+      "steps": 18,
+      "return": 10.82,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000101,
+      "success": true,
+      "steps": 12,
+      "return": 10.88,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000102,
+      "success": true,
+      "steps": 20,
+      "return": 10.8,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000103,
+      "success": false,
+      "steps": 96,
+      "return": -0.9600000000000006,
+      "status": "timeout"
+    },
+    {
+      "seed": 2000104,
+      "success": true,
+      "steps": 42,
+      "return": 10.58,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000105,
+      "success": true,
+      "steps": 40,
+      "return": 10.6,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000106,
+      "success": false,
+      "steps": 96,
+      "return": -0.9600000000000006,
+      "status": "timeout"
+    },
+    {
+      "seed": 2000107,
+      "success": true,
+      "steps": 20,
+      "return": 10.8,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000108,
+      "success": true,
+      "steps": 51,
+      "return": 10.49,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000109,
+      "success": true,
+      "steps": 22,
+      "return": 10.78,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000110,
+      "success": true,
+      "steps": 25,
+      "return": 10.75,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000111,
+      "success": true,
+      "steps": 42,
+      "return": 10.58,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000112,
+      "success": true,
+      "steps": 17,
+      "return": 10.83,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000113,
+      "success": true,
+      "steps": 47,
+      "return": 10.53,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000114,
+      "success": true,
+      "steps": 43,
+      "return": 10.57,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000115,
+      "success": true,
+      "steps": 28,
+      "return": 10.72,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000116,
+      "success": true,
+      "steps": 51,
+      "return": 10.49,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000117,
+      "success": true,
+      "steps": 32,
+      "return": 10.68,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000118,
+      "success": true,
+      "steps": 37,
+      "return": 10.63,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000119,
+      "success": true,
+      "steps": 46,
+      "return": 10.54,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000120,
+      "success": true,
+      "steps": 26,
+      "return": 10.74,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000121,
+      "success": true,
+      "steps": 15,
+      "return": 10.85,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000122,
+      "success": true,
+      "steps": 26,
+      "return": 10.74,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000123,
+      "success": true,
+      "steps": 32,
+      "return": 10.68,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000124,
+      "success": true,
+      "steps": 30,
+      "return": 10.7,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000125,
+      "success": true,
+      "steps": 31,
+      "return": 10.69,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000126,
+      "success": true,
+      "steps": 13,
+      "return": 10.870000000000001,
+      "status": "escaped"
+    },
+    {
+      "seed": 2000127,
+      "success": true,
+      "steps": 21,
+      "return": 10.79,
+      "status": "escaped"
+    }
+  ]
+}

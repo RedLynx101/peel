@@ -8,6 +8,19 @@ from fastapi.testclient import TestClient
 from peel import server
 
 
+def test_published_summary_counts_match_episode_evidence():
+    path = server.DATA / "test-results.json"
+    if not path.exists():
+        return
+    for result in json.loads(path.read_text()):
+        episodes = result["episodes"]
+        summary = result["summary"]
+        assert len(episodes) == summary["episodes"] == 128
+        assert sum(e["success"] for e in episodes) == summary["successes"]
+        assert summary["success_rate"] == summary["successes"] / len(episodes)
+        assert (server.DATA / "runs" / result["run"] / "metrics.jsonl").is_file()
+
+
 def test_curated_replays_have_consistent_frames_and_real_probabilities():
     index = server.DATA / "replays" / "index.json"
     if not index.exists():

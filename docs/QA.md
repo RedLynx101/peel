@@ -1,6 +1,6 @@
 # Verification record
 
-Verified September 5, 2026 by the primary agent. **25 Python tests passed**, Ruff lint/format and JavaScript syntax/Prettier checks passed. The bundled 325 KB checkpoint was hash-checked and used for actual CPU inference through the API. The editable package installation also completed successfully.
+Verified September 5, 2026 by the primary agent. **26 Python tests passed**, Ruff lint/format and JavaScript syntax/Prettier checks passed. The bundled 325 KB checkpoint was hash-checked and used for actual CPU inference through the API. The editable package installation also completed successfully.
 
 The Chrome browser run passed **29 checks** in `scripts/browser-qa.js`: playback/pause/restart/scrub/4x, exact-map comparison and unequal episode lengths, checkpoint labels, validation-only chart data, custom-map inference, object/boundary editing, keyboard placement, and recoverable missing-model/server errors. Layout checks passed at 1440, 390, and 360 pixels with no horizontal overflow. Reduced motion disabled autoplay. There were no uncaught JavaScript errors; two network errors were deliberately injected for the recovery checks.
 
@@ -50,3 +50,4 @@ The primary agent owns integrated verification. A passing backend test alone doe
 - No public deployment or visibility change.
 
 Scientific measurements and their limits are recorded in [EXPERIMENTS.md](EXPERIMENTS.md). The criteria above define ongoing acceptance; a camera policy that fails its test suite is reported as a failed experiment, not hidden by a passing software test.
+

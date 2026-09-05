@@ -1,0 +1,6 @@
+{
+  "elapsed_seconds": 471.03563120000763,
+  "device": "cuda",
+  "peak_allocated_bytes": 74083328,
+  "includes": "initialization, demonstrations, PPO, evaluation, checkpoint and artifact writes"
+}
