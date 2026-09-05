@@ -1,0 +1,9 @@
+{
+  "name": "peel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A tiny transformer learns the art of the banana heist.",
+  "license": "MIT",
+  "scripts": {"check": "node --check web/app.js && node --check web/renderer.js && node --check web/charts.js && node --check web/editor.js"}
+}
